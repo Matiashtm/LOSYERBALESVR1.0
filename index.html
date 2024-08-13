@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Ruta de la Yerba Mate</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+	    width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #004d00;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #backgroundImages {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background-size: cover;
+            background-position: center;
+            transition: background-image 1s ease-in-out;
+        }
+
+        #container {
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            color: white;
+        }
+
+        #startButton {
+            background-color: #00cc00;
+            color: white;
+            padding: 15px 30px;
+            font-size:40px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 0px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 0 50px 2px white;
+            animation: pulse 2s infinite;
+            width: 500px;
+            height: 100px;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        #startButton:hover {
+            background-color: #0066cc; /* Cambiar a azul al pasar el mouse */
+            transform: none; /* Detener la animación de pulso al hacer hover */
+
+        }
+
+        #languageButton {
+            position: absolute;
+            margin-top: 300px;
+            margin-left: 10px;
+            background-color: #00cc00;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+	    z-index:1;
+        }
+
+        #languageList {
+            display: none;
+            position: absolute;
+            margin-top: 550px;
+            margin-left: 10px;
+            background-color: #00cc00;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        #languageList button {
+            display: flex;
+            align-items: center;
+            background-color: transparent;
+            color: white;
+            border: none;
+            padding: 5px 0;
+            text-align: left;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        #languageList img {
+            margin-left: 10px;
+            width: 20px;
+            height: 14px;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; }
+            10%, 90% { opacity: 1; }
+        }
+
+        #title1, #title2, #title3 {
+	    margin-top: 200px;
+            display: none;
+	    font-size: 100px;
+            animation: fadeInOut 6s infinite;
+        }
+        #videoContainer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            z-index: 2;
+        }
+
+        #videoContainer iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="backgroundImages"></div>
+
+    <div id="container">
+        <h1 id="title1">Viva a experiencia...</h1>
+        <h1 id="title2">La ruta de la Yerba Mate...</h1>
+        <h1 id="title3">En realidad virtual...</h1>
+        <button id="startButton">INICIAR RECORRIDO</button>
+    </div>
+    <button id="languageButton">CAMBIAR IDIOMA</button>
+    <div id="languageList">
+        <button data-lang="es">ESPANOL <img src="spain-flag.png" alt="ES"></button>
+        <button data-lang="en">INGLES <img src="uk-flag.png" alt="EN"></button>
+        <button data-lang="pt">PORTUGUES <img src="portugal-flag.png" alt="PT"></button>
+        <button data-lang="de">ALEMAN <img src="germany-flag.png" alt="DE"></button>
+        <button data-lang="fr">FRANCES <img src="france-flag.png" alt="FR"></button>
+        <button data-lang="it">ITALIANO <img src="italy-flag.png" alt="IT"></button>
+    </div>
+
+    <script>
+        const images = [
+            "YB1.jpg",
+            "YB2.jpg",
+            "YB3.jpg",
+            "YB4.jpg",
+            "YB5.jpg"
+        ];
+
+        const titles = [
+            { es: "Viva a experiencia...", en: "Live the experience...", pt: "Viva a experiencia...", de: "Erleben Sie das...", fr: "Vivez l experience...", it: "Vivi l esperienza..." },
+            { es: "La ruta de la Yerba Mate...", en: "The Yerba Mate Route...", pt: "A Rota da Yerba Mate...", de: "Die Yerba Mate Route...", fr: "La route du Yerba Mate...", it: "Il percorso della Yerba Mate..." },
+            { es: "En realidad virtual...", en: "In virtual reality...", pt: "Em realidade virtual...", de: "In virtueller Realitat...", fr: "En realite virtuelle...", it: "In realta virtuale..." }
+        ];
+
+        let currentLang = "es";
+        let imageIndex = 0;
+
+        function changeBackgroundImage() {
+            document.getElementById('backgroundImages').style.backgroundImage = `url(${images[imageIndex]})`;
+            imageIndex = (imageIndex + 1) % images.length;
+        }
+
+        function cycleTitles() {
+            const title1 = document.getElementById("title1");
+            const title2 = document.getElementById("title2");
+            const title3 = document.getElementById("title3");
+
+            setTimeout(() => { title1.style.display = "block"; }, 0);
+            setTimeout(() => { title1.style.display = "none"; title2.style.display = "block"; }, 2000);
+            setTimeout(() => { title2.style.display = "none"; title3.style.display = "block"; }, 4000);
+            setTimeout(() => { title3.style.display = "none"; }, 6000);
+        }
+
+        setInterval(cycleTitles, 6000); // Adjusted for 6 seconds for title animation
+
+        setInterval(changeBackgroundImage, 2000); // Change image every 2 seconds
+
+ document.getElementById("startButton").addEventListener("click", () => {
+            document.body.innerHTML = `
+            <div id="videoContainer">
+                <iframe 
+                    src="https://www.youtube.com/embed/sPyAQQklc1s?autoplay=1&controls=1&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3" 
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+                </iframe>
+            </div>`;
+        });
+
+        document.getElementById("languageButton").addEventListener("click", () => {
+            const list = document.getElementById("languageList");
+            list.style.display = list.style.display === "block" ? "none" : "block";
+        });
+
+        document.querySelectorAll("#languageList button").forEach(button => {
+            button.addEventListener("click", () => {
+                currentLang = button.getAttribute("data-lang");
+                document.getElementById("title1").textContent = titles[0][currentLang];
+                document.getElementById("title2").textContent = titles[1][currentLang];
+                document.getElementById("title3").textContent = titles[2][currentLang];
+                document.getElementById("startButton").textContent = currentLang === "es" ? "INICIAR RECORRIDO" : currentLang === "en" ? "START TOUR" : "INICIAR RECORRIDO";
+                document.getElementById("languageButton").textContent = currentLang === "es" ? "CAMBIAR IDIOMA" : currentLang === "en" ? "CHANGE LANGUAGE" : "CAMBIAR IDIOMA";
+                document.getElementById("languageList").style.display = "none";
+            });
+        });
+
+        cycleTitles(); // Start the title animation on load
+    </script>
+</body>
+</html>
